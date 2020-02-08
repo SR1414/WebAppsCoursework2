@@ -6,33 +6,7 @@
   <title>Skool App</title>
   <header>Skool App</header>
 </head>
-<div class="signup" id="reg" v-if="seen">
-  <h1>Sign Up</h1>
-  <form>
-    <label for="email"><b>Email:</b></label>
-    <input name="email" type="email" v-model="email" placeholder="Enter your Email:" required>
-    <br>
-    <label for="firstname"><b>First Name:</b></label>
-    <input name="firstname" type="firstname" v-model="firstname" placeholder="Enter your First Name:" required>
-    <br>
-    <label for="lastname"><b>Last Name:</b></label>
-    <input name="lastname" type="lastname" v-model="lastname" placeholder="Enter your Last Name:" required>
-    <br>
-    <label for="usertype"><b>Who Are You?:</b></label>
-    <select name="usertype" type="type" v-model="usertype">
-      <option value="Parent/Student">Parent/Student</option>
-      <option value="Service Provider">Service Provider</option>
-    </select>
-    <br>
-    <label for="password"><b>Password:</b></label>
-    <input name="password" type="password" v-model="password" placeholder="Enter a Password"
-      pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-      title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
-      required>
-    <br>
-    <input type="submit" value="submit" @click="Getusersfromdb">
-  </form>
-</div>
+
 <body>
   <!---------------------------------------------------------LOGIN PAGE---------------------------------------->
   <div class="Logsigncontainer">
@@ -48,7 +22,31 @@
       <button @click="login">Login</button>
     </div>
     <!---------------------------------------------------------REGISTRATION PAGE---------------------------------------->
-
+    <div class="signup" id="reg" v-if="seen">
+      <h1>Sign Up</h1>
+        <label for="email"><b>Email:</b></label>
+        <input name="email" type="email" v-model="email" placeholder="Enter your Email:" required>
+        <br>
+        <label for="firstname"><b>First Name:</b></label>
+        <input name="firstname" type="firstname" v-model="firstname" placeholder="Enter your First Name:" required>
+        <br>
+        <label for="lastname"><b>Last Name:</b></label>
+        <input name="lastname" type="lastname" v-model="lastname" placeholder="Enter your Last Name:" required>
+        <br>
+        <label for="usertype"><b>Who Are You?:</b></label>
+        <select name="usertype" type="type" v-model="usertype">
+          <option value="Parent/Student">Parent/Student</option>
+          <option value="Service Provider">Service Provider</option>
+        </select>
+        <br>
+        <label for="password"><b>Password:</b></label>
+        <input name="password" type="password" v-model="password" placeholder="Enter a Password"
+          pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+          title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+          required>
+        <br>
+        <input type="submit" value="submit" @click="Getusersfromdb">
+    </div>
     
   </div>
  

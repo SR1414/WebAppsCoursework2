@@ -129,6 +129,10 @@ var reg = new Vue({
       .then((data) => {   
         console.log('Success:', data);
         console.log(data.message);
+        console.log((data.firstname.length > 1));
+        if(data.firstname.length > 1){
+          reg.seen = false;
+        }
         alert(data.message);
       })
     }
@@ -142,7 +146,8 @@ var loginuser = new Vue({
   data: {
     logemail: '',
     logpassword: '',
-    seen: true
+    seen: true,
+    loggeduser: []
 
   },
   methods: {
@@ -151,10 +156,11 @@ var loginuser = new Vue({
       return re.test(email);
     },
     login: function loguserin() {
-      var data = {
+      var logdata = {
         email: loginuser.logemail,
         password: loginuser.logpassword
       }
+      
       if (!this.logemail || !this.logpassword) {
         alert("Ensure all fields are filled in with valid information");
         return;
@@ -163,18 +169,24 @@ var loginuser = new Vue({
         alert("Invalid Email");
         return;
       }
+      console.log(logdata);
       fetch('/loguser', {   
         method: 'POST', 
         // or 'PUT'   
         headers: {     
           'Content-Type': 'application/json',   
         },   
-        body: JSON.stringify(data), 
+        body: JSON.stringify(logdata), 
       }) 
-      .then((response) => response.json()) 
+      .then((response) => 
+      response.json()) 
       .then((data) => {   
-        console.log('Success:', data);
         console.log(data.message);
+        console.log(data.firstname);
+        console.log(data.firstname.length);
+        if(data.firstname.length >= 1){
+          loginuser.seen = false;
+        }
         alert(data.message);
       })
 
