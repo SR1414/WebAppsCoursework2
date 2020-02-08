@@ -3,6 +3,7 @@
 //fetch('/getuser').then(response => {
 //});
 
+
 var testvue = new Vue({
   el: '#root',
   data: {
@@ -92,55 +93,21 @@ var reg = new Vue({
     users: []
 
   },
-  /*computed: {
-    Getusersfromdb: function () {
-      fetch('/getuser').then(
-        function (response) {
-          response.json().then(
-            function (text) {
-              reg.users = text;
-              console.log(reg.users);
-            }
-          )
-        }
-      )
-      
-    }
-  },*/
   methods: {
     validEmail: function (email) {
       var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(email);
     },
     Getusersfromdb: function getusers() {
-      var test;
-      fetch('/getuser').then(
-        function (response) {
-          console.log(response);
-          response.json().then(
-            function (text) {
-              
-              test = text;
-              console.log(test);
-            }
-          )
-        }
-      );
-    },
-    signup: function register() {
-      console.log(reg.users);
-      var userlist = [];
-      var email = this.email;
-      var firstname = this.firstname;
-      var lastname = this.lastname;
-      var usertype = this.usertype;
-      var password = this.password;
-      var activity = [];
+      var yes;
       var data = {
-        email: this.email
+        email: reg.email,
+        firstname: reg.firstname,
+        lastname: reg.lastname,
+        usertype: reg.usertype,
+        password: reg.password,
+        activity: []
       }
-
-
       if (!this.email || !this.firstname || !this.lastname || !this.password || !this.usertype) {
         alert("Ensure all fields are filled in with valid information");
         return;
@@ -149,60 +116,21 @@ var reg = new Vue({
         alert("Invalid Email");
         return;
       }
-
-      if (localStorage.getItem("MyUser") == null) {
-        userlist.push({
-          Email: email,
-          Firstname: firstname,
-          Lastname: lastname,
-          Usertype: usertype,
-          Password: password,
-          Activity: activity
-        });
-        var myuserlistserialized = JSON.stringify(userlist);
-        localStorage.setItem("MyUser", myuserlistserialized);
-        console.log("ADDED IF DOESNT EXIST");
-        alert("Account Created");
-
-        this.email = '';
-        this.firstname = '';
-        this.lastname = '';
-        this.usertype = '';
-        this.password = '';
-        return;
-      };
-      if (localStorage.getItem("MyUser") !== null) {
-        var myusers = JSON.parse(localStorage.getItem("MyUser"));
-        var i = 0;
-        for (i = 0; i < myusers.length; i++) {
-          if (myusers[i].Email == this.email) {
-            alert("Email Already Registered");
-            return;
-          } else {
-            var newuser = {
-              Email: this.email,
-              FirstName: this.firstname,
-              LastName: this.lastname,
-              Usertype: this.usertype,
-              Password: this.password,
-              Activity: activity
-            }
-
-            var existingusers = JSON.parse(localStorage.getItem("MyUser"));
-            existingusers.push(newuser);
-            console.log(newuser);
-            var myuserlistserialized = JSON.stringify(existingusers);
-            var test = JSON.parse(myuserlistserialized);
-            console.log(test[1]);
-            localStorage.setItem("MyUser", myuserlistserialized);
-            console.log("Account added to users");
-            alert("Account Created");
-            return;
-          }
-
-        }
-
-      }
+      //asks server for list of users and checks if it is empty or not
+      fetch('/newuser', {   
+        method: 'POST', 
+        // or 'PUT'   
+        headers: {     
+          'Content-Type': 'application/json',   
+        },   
+        body: JSON.stringify(data), 
+      }) 
+      .then((response) => response.json()) 
+      .then((data) => {   
+        console.log('Success:', data);
+        console.log(data.message);
+        alert(data.message);
+      })
     }
   }
 });
@@ -223,24 +151,10 @@ var loginuser = new Vue({
       return re.test(email);
     },
     login: function loguserin() {
-      var email = this.logemail;
-      var password = this.logpassword;
-      var i = 0;
-      var userlist = JSON.parse(localStorage.getItem("MyUser"));
-      var serveruserlist = [];
-      var validuser;
-      fetch('/users').then(
-        function (response) {
-          response.json().then(
-            function (text) {
-              serveruserlist = text;
-              //console.log(serveruserlist)
-            }
-          )
-        }
-      );
-
-
+      var data = {
+        email: loginuser.logemail,
+        password: loginuser.logpassword
+      }
       if (!this.logemail || !this.logpassword) {
         alert("Ensure all fields are filled in with valid information");
         return;
@@ -249,32 +163,20 @@ var loginuser = new Vue({
         alert("Invalid Email");
         return;
       }
-      if (localStorage.getItem("MyUser") == null) {
-        alert("Invalid Email/Password");
-        return;
-      }
-      if (localStorage.getItem("MyUser") !== null) {
-        for (i = 0; i < userlist.length; i++) {
-          if (userlist[i].Email == this.logemail) {
-            var currentuserJSON = JSON.stringify(userlist[i]);
-            var currentuser = userlist[i];
-            if (currentuser.Password == this.logpassword) {
-              localStorage.setItem("LoggedInUser", currentuserJSON);
-              alert(
-                "log In Successful. Hello " + currentuser.FirstName + "!"
-              )
-              userinfo.getuserinfo();
-            } if (currentuser.Password !== this.logpassword) {
-              alert("Invalid Email/Password");
-              return;
-            }
-            //this.seen = false;
-
-          }
-
-
-        }
-      }
+      fetch('/loguser', {   
+        method: 'POST', 
+        // or 'PUT'   
+        headers: {     
+          'Content-Type': 'application/json',   
+        },   
+        body: JSON.stringify(data), 
+      }) 
+      .then((response) => response.json()) 
+      .then((data) => {   
+        console.log('Success:', data);
+        console.log(data.message);
+        alert(data.message);
+      })
 
     }
   }

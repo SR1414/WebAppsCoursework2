@@ -19,15 +19,15 @@ app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     next();
 });
-
+app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-app.use(bodyParser.json())
+
+
 app.use('/api', routes);
 
 
-app.use(bodyParser.json())
 var courses = [
     { topic: 'math', location: 'hendon', price: 100, time: '12:00', length: 2, rating: 5,},
     { topic: 'math', location: 'colindale', price: 80, time: '13:00', length: 1.5, rating: 3,},
@@ -57,35 +57,36 @@ app.get('/users', (req, res) => {
 
 
 app.post('/newuser', function (req, res) {
-    const useremail = JSON.stringify(req.body.email);
+    console.log(req.body.email)
+    var response = {
+        message: ""
+    }
     User.findOne({ email: req.body.email }, function(err, users) {
-        
-        if(users !== null){
-        res.redirect('/');  
-        }
-        if(users == null){
+        console.log(users);
+        if(!users){
+            console.log("User does not exist");
             const userData = new User(req.body);
             userData.save();
-            res.redirect('/');
+            response.message = "Account Created";
+            console.log(response)
+            res.send(response);
+        }
+        if(users){
+        console.log("User Already exists");
+        response.message = "Email Already Registered to another Account"
+        res.send(response);
         }
         if(err){
-            res.send('error');
+            res.send(response);
             next();
         }
     })
 });
-app.post('/checkuser', function (req, res) {
-    console.log(JSON.stringify(req.body));
-    var uemail = JSON.stringify(req.body)
-    console.log(uemail);
-    User.findOne({ email: req.body.email }, function(err, users) {
-        console.log(users);
-        res.send('err');
-        if(err){
-            res.send('error');
-            next();
-        }
-    })
+app.post('/loguser', function (req, res) {
+    var response = {
+        message: ""
+    }
+
 });
 
 app.get('/getuser', function (req, res) {
@@ -93,7 +94,7 @@ app.get('/getuser', function (req, res) {
         //users[1].activity = null;
         //users[1].activity = courses;
         //res.send(users[1].activity[1]);
-        res.send(JSON.stringify("hello"));
+        res.send(JSON.stringify(users));
     })
 })
 
