@@ -116,10 +116,9 @@
       <button @click="getuserinfo">Display User Information</button>
       <div v-for="user in UserInfo">
         Email: {{ user.Email }}<br>
-        <input type="email" placeholder="{{ user.Email }}">
         Name: {{ user.FirstName }} {{ user.LastName}}<br>
         User Type: {{ user.UserType }}<br><br>
-
+        <button @click="loguserout">Logout</button>
       </div>
 
       <p><b>Selected Classes: </b></p>
@@ -135,11 +134,13 @@
       </div>
       <br>
       </p>
-      <label for="SelectedClass"><b>Enter ID of chosen activity:</b></label>
-      <input type="number" name="SelectedClass" v-model="selectedClassId" min="1" max="10">
-      <button @click="AddClass">Add Activity</button>
-
-      <button @click="loguserout">Logout</button>
+      <label><b>Enter Topic and School of activity:</b></label><br>
+      <input name="SelectedTopic" v-model="SelectedTopic" placeholder="Enter Topic:"><br>
+      <input name="SelectedSchool" v-model="SelectedSchool" placeholder="Enter School:"><br>
+      <textarea name="UserReview" v-model="UserReview" placeholder="Enter review" rows="4" cols="50"></textarea>
+      <button @click="AddClass">Add Activity</button><br>
+      <br><br>
+      
     </div>
   </div>
 

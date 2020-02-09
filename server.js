@@ -29,7 +29,7 @@ app.use('/api', routes);
 
 
 var courses = [
-    { topic: 'math', location: 'hendon', school: 'Middlesex University', price: 100, time: '12:00', length: 2, rating: 5, },
+    { topic: 'math', location: 'hendon', school: 'Middlesex University', price: 100, time: '12:00', length: 2, rating: 5, reviews: [] },
     { topic: 'math', location: 'colindale', school: 'St James Catholic High School', price: 80, time: '13:00', length: 1.5, rating: 3, reviews: [] },
     { topic: 'math', location: 'brent cross', school: 'North London Tutorial College', price: 90, time: '12:00', length: 1, rating: 4, reviews: [] },
     { topic: 'math', location: 'golders green', school: 'Golders Green College', price: 120, time: '14:00', length: 2, rating: 5, reviews: [] },
@@ -39,11 +39,28 @@ var courses = [
     { topic: 'english', location: 'golders green', school: 'The King Alfred School', price: 130, time: '10:00', length: 1, rating: 5, reviews: [] },
     { topic: 'sports', location: 'hendon', school: 'Brampton College', price: 120, time: '14:00', length: 1, rating: 5, reviews: [] },
     { topic: 'sports', location: 'golders green', school: 'Hampstead School', price: 140, time: '16:00', length: 1.5, rating: 4, reviews: [] }];
-//app.get('/lessons', function (req, res) {
-//  res.send(JSON.stringify(lessons));
-//})
+var i;
+var x;
+Lesson.find({ topic: courses[1].topic, location: courses[1].location, school: courses[1].school, price: courses[1].price }, function (err, lessons) {
+    if (lessons.length == 0) {
+        for (i = 0; i <= courses.length-1; i++) {
+            const lessonData = new Lesson(courses[i]);
+            lessonData.save();
+        }
+    }
+    if (lessons.length !== 0) {
+        console.log("There are lessons")
+        Lesson.find({}, function (err, lessons) {
+            console.log(lessons.length-1);
+        })
+
+    }
+
+})
 app.get('/courses', (req, res) => {
     res.send(JSON.stringify(courses));
+
+
 })
 
 app.get('/users', (req, res) => {
@@ -135,7 +152,55 @@ app.post('/loguser', function (req, res) {
 
 });
 
+app.post('/newreview', function (req, res) {
+    Lesson.findOne({ topic: req.body.selectedtopic, school: req.body.selectedschool }, function (err, lessons) {
+        //var x = lessons.reviews[1].authoremail;
+        //var y = req.body.email;
+        //console.log(x);
+        //console.log(y);
+        //console.log(x == y);
+        console.log(lessons.reviews.length)
+        if(lessons.reviews.length == 0){
+            console.log("no reviews");
+            Lesson.updateOne({topic: req.body.selectedtopic, school: req.body.selectedschool },{$push :{reviews: {authoremail: req.body.email, authorfirstname: req.body.firstname, authorlastname: req.body.lastname, authorreview: req.body.userreview}}}).catch(function(error,affect,resp){
+                console.log("review saved");
+             })
+             console.log("review saved");
+        }
+        if(lessons.reviews.length !== 0){
+            for (i = 0; i <= lessons.reviews.length-1; i++) {
+                console.log(lessons.reviews[i]);
+
+                if(lessons.reviews[i].authoremail == req.body.email){
+                    console.log(lessons.reviews);
+                    lessons.reviews[i].authorreview = req.body.userreview;
+                    console.log(lessons.reviews);
+                    console.log("true")
+                    Lesson.updateOne({topic: req.body.selectedtopic, school: req.body.selectedschool },{$set :{reviews: lessons.reviews}}).catch(function(error,affect,resp){
+                        console.log("review saved");
+                     })
+                }
+                if(lessons.reviews[i].authoremail !== req.body.email){
+                    Lesson.updateOne({topic: req.body.selectedtopic, school: req.body.selectedschool },{$push :{reviews: {authoremail: req.body.email, authorfirstname: req.body.firstname, authorlastname: req.body.lastname, authorreview: req.body.userreview}}}).catch(function(error,affect,resp){
+                        console.log("review saved");
+                     })
+                }
+            }
+        }
+        //Lesson.updateOne({school: lessons.school },{$set: {reviews: y }, function(err, result) {
+            //console.log(result);
+        //}})
+        
+
+
+
+    })
+
+
+})
+
 app.get('/getuser', function (req, res) {
+    console.log(req.body);
     User.find({}, function (err, users) {
         //users[1].activity = null;
         //users[1].activity = courses;

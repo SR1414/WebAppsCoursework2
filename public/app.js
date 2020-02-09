@@ -141,8 +141,13 @@ var reg = new Vue({
           console.log('Success:', data);
           console.log(data.message);
           console.log((data.firstname.length > 1));
-          if (data.firstname.length > 1) {
+          if (data.firstname.length >= 1) {
             reg.seen = false;
+            this.reg.email = '',
+            this.firstname = '',
+            this.lastname = '',
+            this.usertype = '',
+            this.password = ''
           }
           alert(data.message);
         })
@@ -229,6 +234,9 @@ var userinfo = new Vue({
     seen: 'false',
     selectedClassId: '',
     retrievedActivity: [],
+    SelectedTopic: '',
+    SelectedSchool: '',
+    UserReview: '',
     Reviews: [],
     currentuser: []
 
@@ -266,12 +274,6 @@ var userinfo = new Vue({
           }
         ];
         this.UserInfo = loggedUser;
-        /*this.Email = userinfo.Email;
-        this.Firstname = userinfo.Firstname;
-        this.Lastname = userinfo.Lastname;
-        this.UserType = userinfo.Usertype;
-        this.Message = "Logged in"
-        this.Activity = userinfo.Activity;*/
         this.retrievedActivity = this.currentuser.activity;
       }
 
@@ -292,32 +294,37 @@ var userinfo = new Vue({
 
     },
     AddClass: function addclass() {
-      var StoredUsers = JSON.parse(localStorage.getItem("MyUser"));
-      var courses = testvue.courses;
-      var CurrentLoggedinUser = JSON.parse(localStorage.getItem("LoggedInUser"));
-      var userJSON = null;
-      var storeduserJSON
-      var i = 0;
-      for (i = 0; i < courses.length; i++) {
-        if (courses[i].classID == this.selectedClassId) {
-          console.log("works");
-          CurrentLoggedinUser.Activity.push(courses[i]);
-          userJSON = JSON.stringify(CurrentLoggedinUser);
-          localStorage.setItem("LoggedInUser", userJSON);
-          this.retrievedActivity = CurrentLoggedinUser.Activity;
-
-
-          var x = 0;
-          for (x = 0; x < StoredUsers.length; x++) {
-            if (StoredUsers[x].Email == CurrentLoggedinUser.Email) {
-              StoredUsers[x] = CurrentLoggedinUser;
-              storeduserJSON = JSON.stringify(StoredUsers);
-              localStorage.setItem("MyUser", storeduserJSON);
-
-            }
-          }
-        }
+      if(!this.SelectedTopic || !this.SelectedSchool || !this.UserReview){
+        alert("Please fill in the relevant fields")
+        return;
       }
+      if(!this.currentuser){
+        alert("Please log in to enter review");
+        return;
+      }
+      var reviewinfo = {
+        email: this.currentuser.email,
+        firstname: this.currentuser.firstname,
+        lastname: this.currentuser.lastname,
+        selectedtopic: this.SelectedTopic,
+        selectedschool: this.SelectedSchool,
+        userreview: this.UserReview
+      };
+      console.log(reviewinfo);
+      fetch('/newreview', {
+        method: 'POST',
+        // or 'PUT'   
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(reviewinfo),
+      })
+        .then((response) =>
+          response.json())
+        .then((data) => {
+          console.log("hello")
+          alert(data);
+        })
     }
 
   }
