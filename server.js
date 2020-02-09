@@ -127,6 +127,19 @@ app.post('/newuser', function (req, res) {
         }
     })
 });
+app.post('/newclass', function (req, res) {
+    console.log(req.body.email)
+    var response = {
+        activity: [],
+        email: "",
+        firstname: "",
+        lastname: "",
+        usertype: "",
+        message: "",
+    }
+    const lessonData = new Lesson(req.body);
+                lessonData.save();
+});
 app.post('/loguser', function (req, res) {
     var response = {
         activity: [],

@@ -242,7 +242,14 @@ var userinfo = new Vue({
     UpdateEmail: '',
     UpdateFirstname: '',
     UpdateLastname: '',
-    UpdatePassword: ''
+    UpdatePassword: '',
+    newTopic: '',
+    newLocation: '',
+    newSchool: '',
+    newPrice: '',
+    newTime: '',
+    newLength: '',
+    newRating: ''
 
 
   },
@@ -438,6 +445,50 @@ var userinfo = new Vue({
       this.SelectedTopic = '';
       this.SetRating = '';
       this.UserReview = '';
+    },
+    addClass: function addclass() {
+      
+      var newlessoninfo = {
+        topic: this.newTopic,
+        location: this.newLocation,
+        school: this.newSchool,
+        price: this.newPrice,
+        time: this.newTime,
+        length: this.newLength,
+        rating: this.newRating,
+        reviews: []
+      }
+      console.log(newlessoninfo)
+      if (!this.newTopic || !this.newLocation || !this.newSchool || !this.newPrice || !this.newTime || !this.newLength || !this.newRating) {
+        alert("Please fill in the relevant fields")
+        return;
+        
+      }
+      console.log(this.currentuser.length);
+      if (this.currentuser == 0) {
+        console.log("Please log in");
+        alert("Please log in");
+        return;
+      }
+      if (this.currentuser.usertype !== "Service Provider") {
+        console.log("Service Providers Only!");
+        alert("Service Providers Only!");
+        return;
+      }
+      fetch('/newclass', {
+        method: 'POST',
+        // or 'PUT'   
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newlessoninfo),
+      })
+        .then((response) =>
+          response.json())
+        .then((data) => {
+          console.log("hello")
+          alert(data);
+        })
     }
 
   }

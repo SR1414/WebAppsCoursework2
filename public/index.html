@@ -98,7 +98,6 @@
       <div id="coursebox" v-for="course in filteredCourses">
 
         Course:{{ course.topic }}<br>
-        ID:{{ course.classID }}<br>
         Location: {{ course.location}}<br>
         School: {{ course.school}}<br>
         Price:£{{ course.price}}<br>
@@ -130,6 +129,7 @@
 
       <p><b>Selected Classes: </b></p>
       <div v-for="activity in retrievedActivity">
+        <label><b>Account Info:</b></label><br>
         Topic:{{ activity.topic }}
         <br>Location:{{ activity.location }}
         <br>School:{{ activity.school}}
@@ -142,14 +142,67 @@
       <br>
       </p>
       <label><b>Enter Topic and School of activity:</b></label><br>
-      <input name="SelectedTopic" v-model="SelectedTopic" placeholder="Enter Topic:"><br>
-      <input name="SelectedSchool" v-model="SelectedSchool" placeholder="Enter School:"><br>
+      <label><b>Topic: </b></label>
+      <select name="SelectedTopic" type="SelectedTopic" placeholder="Enter Topic:" v-model="SelectedTopic">
+        <option value="math">math</option>
+        <option value="english">english</option>
+        <option value="sports">sports</option>
+      </select><br>
+      <label><b>School: </b></label>
+      <select name="SelectedSchool" type="SelectedSchool" v-model="SelectedSchool">
+        <option value="Middlesex University">Middlesex University</option>
+        <option value="St James Catholic High School">St James Catholic High School</option>
+        <option value="North London Tutorial College">North London Tutorial College</option>
+        <option value="Golders Green College">Golders Green College</option>
+        <option value="Wentworth College">Golders Green College</option>
+        <option value="Barnet and Southgate College">Golders Green College</option>
+        <option value="Whitefield School">Golders Green College</option>
+        <option value="The King Alfred School">Golders Green College</option>
+        <option value="Brampton College">Golders Green College</option>
+        <option value="Hampstead School">Hampstead School</option>
+      </select><br>
       <button @click="deleteClass">Delete Activity</button><br>
       <label for="number"><b>Set Rating out of 5:</b></label><br>
       <input type="number" name="quantity" v-model="SetRating" min="1" max="5"><br>
       <textarea name="UserReview" v-model="UserReview" placeholder="Enter review" rows="4" cols="50"></textarea><br>
-      <button @click="reviewClass">Submit Review</button><br>
+      <button @click="reviewClass">Submit Review</button><br><br><br>
+      <label><b>Create Activity:</b></label><br>
+      <label for="newTopic"><b>Set Topic:</b></label>
+      <select name="newTopic" type="newTopic" v-model="newTopic">
+        <option value="math">math</option>
+        <option value="english">english</option>
+        <option value="sports">sports</option>
+      </select><br>
+      <label for="newLocation"><b>Set Location:</b></label>
+      <select name="newLocation" type="newLocation" v-model="newLocation">
+        <option value="golders green">golders green</option>
+        <option value="brent cross">brent cross</option>
+        <option value="colindale">colindale</option>
+        <option value="hendon">hendon</option>
+      </select><br>
+      <label for="newSchool"><b>Set School:</b></label>
+      <select name="newSchool" type="newSchool" v-model="newSchool">
+        <option value="Middlesex University">Middlesex University</option>
+        <option value="St James Catholic High School">St James Catholic High School</option>
+        <option value="North London Tutorial College">North London Tutorial College</option>
+        <option value="Golders Green College">Golders Green College</option>
+        <option value="Wentworth College">Golders Green College</option>
+        <option value="Barnet and Southgate College">Golders Green College</option>
+        <option value="Whitefield School">Golders Green College</option>
+        <option value="The King Alfred School">Golders Green College</option>
+        <option value="Brampton College">Golders Green College</option>
+        <option value="Hampstead School">Hampstead School</option>
+      </select><br>
+      <label for="newPrice"><b>Set Price:</b></label>
+      <input type="number" name="newPrice" v-model="newPrice"><br>
+      <label for="newTime"><b>Set Time:</b></label>
+      <input type="time" name="newTime" v-model="newTime"><br>
+      <label for="newLength"><b>Set Length (Hours):</b></label>
+      <input type="number" name="newLength" v-model="newLength"><br>
+      <label for="newRating"><b>Set Rating ( /5 ):</b></label>
+      <input type="number" name="newRating" v-model="newRating" min="1" max="5"><br>
       <br><br>
+      <button @click="addClass">Create Activity</button>
       
     </div>
   </div>
