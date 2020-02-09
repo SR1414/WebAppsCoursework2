@@ -191,6 +191,35 @@ app.post('/updateuser', function (req, res) {
     })
 
 })
+app.post('/deleteuser', function (req, res) {
+    var response = {
+        message: ''
+    }
+    User.deleteOne({ email: req.body.currentuseremail }, function (err){
+        console.log("Account Deleted");
+        res.send(response);
+    })
+})
+app.post('/deleteuser', function (req, res) {
+    var response = {
+        message: ''
+    }
+    User.deleteOne({ email: req.body.currentuseremail }, function (err){
+        console.log("Account Deleted");
+        res.send(response);
+    })
+})
+app.post('/deleteclass', function (req, res) {
+    var response = {
+        message: ''
+    }
+
+    Lesson.deleteOne({ topic: req.body.selectedtopic, school: req.body.selectedschool }, function (err){
+        console.log("Class Deleted");
+        response.message = "Class Deleted";
+        res.send(response);
+    })
+})
 
 app.post('/newreview', function (req, res) {
     Lesson.findOne({ topic: req.body.selectedtopic, school: req.body.selectedschool }, function (err, lessons) {

@@ -144,10 +144,10 @@ var reg = new Vue({
           if (data.firstname.length >= 1) {
             reg.seen = false;
             this.reg.email = '',
-            this.firstname = '',
-            this.lastname = '',
-            this.usertype = '',
-            this.password = ''
+              this.firstname = '',
+              this.lastname = '',
+              this.usertype = '',
+              this.password = ''
           }
           alert(data.message);
         })
@@ -231,7 +231,7 @@ var userinfo = new Vue({
     UserType: '-',
     Message: "Not Logged In",
     Activity: [],
-    seen: 'false',
+    seen: 'true',
     retrievedActivity: [],
     SelectedTopic: '',
     SelectedSchool: '',
@@ -254,7 +254,7 @@ var userinfo = new Vue({
         loggedUser = [
           { Email: "-", FirstName: "-", LastName: "-", UserType: "-", Message: "Not Logged in" }
         ];
-        var noactivity = [{ topic: '-', location: '-', school: '-', price: '-', time: '-', length: '-', rating: '-', reviews: '-'}];
+        var noactivity = [{ topic: '-', location: '-', school: '-', price: '-', time: '-', length: '-', rating: '-', reviews: '-' }];
         this.UserInfo = loggedUser;
         this.Email = "-";
         this.Firstname = "-";
@@ -267,13 +267,14 @@ var userinfo = new Vue({
       }
       if (this.currentuser) {
         loggedUser = [
-          { Email: this.currentuser.email, 
-            FirstName: this.currentuser.firstname, 
-            LastName: this.currentuser.lastname, 
+          {
+            Email: this.currentuser.email,
+            FirstName: this.currentuser.firstname,
+            LastName: this.currentuser.lastname,
             Password: this.currentuser.password,
-            UserType: this.currentuser.usertype, 
-            Message: "Logged in", 
-            Activity: this.currentuser.activity, 
+            UserType: this.currentuser.usertype,
+            Message: "Logged in",
+            Activity: this.currentuser.activity,
             Reviews: this.currentuser.reviews
           }
         ];
@@ -308,7 +309,7 @@ var userinfo = new Vue({
         lastname: this.UpdateLastname,
         password: this.UpdatePassword
       };
-      if(this.currentuser.length == 0){
+      if (this.currentuser.length == 0) {
         alert("Please Log In");
         return;
       }
@@ -330,20 +331,82 @@ var userinfo = new Vue({
           console.log("hello")
           alert(data);
         })
-        this.UpdateEmail = '';
-        this.UpdateFirstname = '';
-        this.UpdateLastname = '';
-        this.UpdatePassword = '';
-        this.loguserout();
-        alert("logged out")
-      
+      this.UpdateEmail = '';
+      this.UpdateFirstname = '';
+      this.UpdateLastname = '';
+      this.UpdatePassword = '';
+      this.loguserout();
+      alert("logged out")
+
+    },
+    DeleteUser: function deleteuser() {
+      var deleteinfo = {
+        currentuseremail: this.currentuser.email,
+        currentuserfirst: this.currentuser.firstname,
+        currentuserlast: this.currentuser.lastname,
+        currentuserpassword: this.currentuser.password,
+      };
+      if (this.currentuser.length == 0) {
+        alert("Please Log In");
+        return;
+      }
+      fetch('/deleteuser', {
+        method: 'POST',
+        // or 'PUT'   
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(deleteinfo),
+      })
+        .then((response) =>
+          response.json())
+        .then((data) => {
+          console.log("hello")
+        })
+      this.loguserout();
+      alert("logged out")
+    },
+    deleteClass: function deleteclass() {
+      var deleteinfo = {
+        selectedtopic: this.SelectedTopic,
+        selectedschool: this.SelectedSchool
+      };
+      if (!this.SelectedTopic || !this.SelectedSchool) {
+        alert("Please fill in the relevant fields")
+        return;
+        
+      }
+      console.log(this.currentuser.length);
+      if (this.currentuser == 0) {
+        console.log("Please log in");
+        alert("Please log in");
+        return;
+      }
+      if (this.currentuser.usertype !== "Service Provider") {
+        console.log("Service Providers Only!");
+        alert("Service Providers Only!");
+        return;
+      }
+      fetch('/deleteclass', {
+        method: 'POST',
+        // or 'PUT'   
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(deleteinfo),
+      })
+        .then((response) =>
+          response.json())
+        .then((data) => {
+          alert(data.message);
+        })
     },
     reviewClass: function reviewclass() {
-      if(!this.SelectedTopic || !this.SelectedSchool || !this.UserReview || !this.SetRating){
+      if (!this.SelectedTopic || !this.SelectedSchool || !this.UserReview || !this.SetRating) {
         alert("Please fill in the relevant fields")
         return;
       }
-      if(!this.currentuser){
+      if (!this.currentuser) {
         alert("Please log in to enter review");
         return;
       }
@@ -371,10 +434,10 @@ var userinfo = new Vue({
           console.log("hello")
           alert(data);
         })
-        this.SelectedSchool = '';
-        this.SelectedTopic = '';
-        this.SetRating = '';
-        this.UserReview = '';
+      this.SelectedSchool = '';
+      this.SelectedTopic = '';
+      this.SetRating = '';
+      this.UserReview = '';
     }
 
   }
