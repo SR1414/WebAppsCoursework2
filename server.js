@@ -39,7 +39,7 @@ var courses = [
     { topic: 'english', location: 'golders green', school: 'The King Alfred School', price: 130, time: '10:00', length: 1, rating: 5, reviews: [] },
     { topic: 'sports', location: 'hendon', school: 'Brampton College', price: 120, time: '14:00', length: 1, rating: 5, reviews: [] },
     { topic: 'sports', location: 'golders green', school: 'Hampstead School', price: 140, time: '16:00', length: 1.5, rating: 4, reviews: [] }];
-var i;
+/*var i;
 var x;
 Lesson.find({ topic: courses[1].topic, location: courses[1].location, school: courses[1].school, price: courses[1].price }, function (err, lessons) {
     if (lessons.length == 0) {
@@ -47,6 +47,7 @@ Lesson.find({ topic: courses[1].topic, location: courses[1].location, school: co
             const lessonData = new Lesson(courses[i]);
             lessonData.save();
         }
+        courses
     }
     if (lessons.length !== 0) {
         console.log("There are lessons")
@@ -57,8 +58,26 @@ Lesson.find({ topic: courses[1].topic, location: courses[1].location, school: co
     }
 
 })
+*/
 app.get('/courses', (req, res) => {
-    res.send(JSON.stringify(courses));
+    Lesson.find({}, function (err, lessons) {
+        if(lessons.length == 0){
+            for (i = 0; i <= courses.length-1; i++) {
+                const lessonData = new Lesson(courses[i]);
+                lessonData.save();
+                Lesson.find({}, function (err, lessons) {
+                })
+            }
+            res.send(lessons);
+        }
+        if (lessons.length !== 0) {
+            res.send(lessons);
+        }
+
+        if (err) {
+            res.send('err');
+        }
+    })
 
 
 })
