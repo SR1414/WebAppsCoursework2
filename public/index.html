@@ -116,7 +116,8 @@
       <button @click="getuserinfo">Display User Information</button>
       <div v-for="user in UserInfo">
         Email: {{ user.Email }}<br>
-        Name: {{ user.FirstName }}{{ user.LastName}}<br>
+        <input type="email" placeholder="{{ user.Email }}">
+        Name: {{ user.FirstName }} {{ user.LastName}}<br>
         User Type: {{ user.UserType }}<br><br>
 
       </div>
@@ -129,6 +130,7 @@
         <br>Price:{{ activity.price}}
         <br>Time:{{ activity.time}}
         <br>Length(hour):{{ activity.length}}
+        <br>Review(s):{{ activity.reviews}}
         <br><br>
       </div>
       <br>

@@ -229,18 +229,19 @@ var userinfo = new Vue({
     seen: 'false',
     selectedClassId: '',
     retrievedActivity: [],
+    Reviews: [],
     currentuser: []
 
   },
   methods: {
     getuserinfo: function userinfo() {
       var loggedUser;
-      console.log(this.currentuser);
-      if (localStorage.getItem("LoggedInUser") == null) {
+      console.log(!this.currentuser);
+      if (!this.currentuser) {
         loggedUser = [
           { Email: "-", FirstName: "-", LastName: "-", UserType: "-", Message: "Not Logged in" }
         ];
-        var noactivity = [{ topic: '-', location: '-', school: '-', price: '-', time: '-', length: '-', rating: '-', classID: '-' }];
+        var noactivity = [{ topic: '-', location: '-', school: '-', price: '-', time: '-', length: '-', rating: '-', reviews: '-'}];
         this.UserInfo = loggedUser;
         this.Email = "-";
         this.Firstname = "-";
@@ -248,38 +249,43 @@ var userinfo = new Vue({
         this.UserType = "-";
         this.Message = "Not Logged In";
         this.retrievedActivity = noactivity;
+        this.Reviews = "-";
 
       }
-      if (localStorage.getItem("LoggedInUser") !== null) {
+      if (this.currentuser) {
         var userinfo = JSON.parse(localStorage.getItem("LoggedInUser"));
         loggedUser = [
-          { Email: userinfo.Email, FirstName: userinfo.Firstname, LastName: userinfo.Lastname, UserType: userinfo.Usertype, Message: "Logged in", Activity: userinfo.Activity }
+          { Email: this.currentuser.email, 
+            FirstName: this.currentuser.firstname, 
+            LastName: this.currentuser.lastname, 
+            Password: this.currentuser.password,
+            UserType: this.currentuser.usertype, 
+            Message: "Logged in", 
+            Activity: this.currentuser.activity, 
+            Reviews: this.currentuser.reviews
+          }
         ];
         this.UserInfo = loggedUser;
-        this.Email = userinfo.Email;
+        /*this.Email = userinfo.Email;
         this.Firstname = userinfo.Firstname;
         this.Lastname = userinfo.Lastname;
         this.UserType = userinfo.Usertype;
         this.Message = "Logged in"
-        this.Activity = userinfo.Activity;
-        this.retrievedActivity = userinfo.Activity;
+        this.Activity = userinfo.Activity;*/
+        this.retrievedActivity = this.currentuser.activity;
       }
 
 
     },
     loguserout: function logout() {
-      if (localStorage.getItem("LoggedInUser") !== null) {
-        localStorage.removeItem("LoggedInUser");
-        this.Email = "-";
-        this.Firstname = "-";
-        this.Lastname = "-";
-        this.UserType = "-";
-        this.Message = "Not Logged In";
+      if (this.currentuser) {
+        this.currentuser = [];
         loginuser.seen = true;
         this.getuserinfo();
+        alert("logged Out")
         return;
       }
-      if (localStorage.getItem("LoggedInUser") == null) {
+      if (!this.currentuser) {
         alert("Not Logged In");
         return;
       }
