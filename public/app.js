@@ -1,61 +1,3 @@
-
-// Registering Service Worker
-if('serviceWorker' in navigator) {
-	navigator.serviceWorker.register('../sw.js');
-};
-
-// Requesting permission for Notifications after clicking on the button
-var button = document.getElementById("notifications");
-button.addEventListener('click', function(e) {
-	Notification.requestPermission().then(function(result) {
-		if(result === 'granted') {
-			randomNotification();
-		}
-	});
-});
-
-// Setting up random Notification
-function randomNotification() {
-  courses = testvue.courses;
-	var randomItem = Math.floor(Math.random()*courses.length);
-	var notifTitle = courses[randomItem].topic;
-	var notifBody = 'Created by '+courses[randomItem].school+'.';
-	var notifImg = 'data/img/'+courses[randomItem].school+'.jpg';
-	var options = {
-		body: notifBody,
-		icon: notifImg
-	}
-	var notif = new Notification(notifTitle, options);
-	setTimeout(randomNotification, 30000);
-};
-
-// Progressive loading images
-var imagesToLoad = document.querySelectorAll('img[data-src]');
-var loadImages = function(image) {
-	image.setAttribute('src', image.getAttribute('data-src'));
-	image.onload = function() {
-		image.removeAttribute('data-src');
-	};
-};
-if('IntersectionObserver' in window) {
-	var observer = new IntersectionObserver(function(items, observer) {
-		items.forEach(function(item) {
-			if(item.isIntersecting) {
-				loadImages(item.target);
-				observer.unobserve(item.target);
-			}
-		});
-	});
-	imagesToLoad.forEach(function(img) {
-		observer.observe(img);
-	});
-}
-else {
-	imagesToLoad.forEach(function(img) {
-		loadImages(img);
-	});
-} 
-
 var testvue = new Vue({
   el: '#root',
   data: {
@@ -142,6 +84,66 @@ var testvue = new Vue({
     }
   }
 })
+// Registering Service Worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+};
+
+// Requesting permission for Notifications after clicking on the button
+var button = document.getElementById("notifications");
+button.addEventListener('click', function (e) {
+  Notification.requestPermission().then(function (result) {
+    if (result === 'granted') {
+      randomNotification();
+    }
+  });
+});
+
+// Setting up random Notification
+function randomNotification() {
+  courses = testvue.courses;
+  var randomItem = Math.floor(Math.random() * courses.length);
+  var notifTitle = courses[randomItem].topic;
+  var notifBody = 'Created by ' + courses[randomItem].school + '.';
+  var notifImg = 'data/img/' + courses[randomItem].school + '.jpg';
+  var options = {
+    body: notifBody,
+    icon: notifImg
+  }
+  var notif = new Notification(notifTitle, options);
+  setTimeout(randomNotification, 30000);
+};
+
+// Progressive loading images
+var imagesToLoad = document.querySelectorAll('img[data-src]');
+var loadImages = function (image) {
+  image.setAttribute('src', image.getAttribute('data-src'));
+  image.onload = function () {
+    image.removeAttribute('data-src');
+  };
+};
+if ('IntersectionObserver' in window) {
+  var observer = new IntersectionObserver(function (items, observer) {
+    items.forEach(function (item) {
+      if (item.isIntersecting) {
+        loadImages(item.target);
+        observer.unobserve(item.target);
+      }
+    });
+  });
+  imagesToLoad.forEach(function (img) {
+    observer.observe(img);
+  });
+}
+else {
+  imagesToLoad.forEach(function (img) {
+    loadImages(img);
+  });
+}
+
+
+
+
 
 ////////////////////////////////////SIGNUP////////////////////////////////////////
 var reg = new Vue({
@@ -195,7 +197,7 @@ var reg = new Vue({
           console.log((data.firstname.length > 1));
           if (data.firstname.length >= 1) {
             reg.seen = false;
-            this.reg.email = '',
+            this.email = '',
               this.firstname = '',
               this.lastname = '',
               this.usertype = '',
@@ -438,7 +440,7 @@ var userinfo = new Vue({
       if (!this.SelectedTopic || !this.SelectedSchool) {
         alert("Please fill in the relevant fields")
         return;
-        
+
       }
       console.log(this.currentuser.length);
       if (this.currentuser == 0) {
@@ -504,7 +506,7 @@ var userinfo = new Vue({
       this.UserReview = '';
     },
     addClass: function addclass() {
-      
+
       var newlessoninfo = {
         topic: this.newTopic,
         location: this.newLocation,
@@ -519,7 +521,7 @@ var userinfo = new Vue({
       if (!this.newTopic || !this.newLocation || !this.newSchool || !this.newPrice || !this.newTime || !this.newLength || !this.newRating) {
         alert("Please fill in the relevant fields")
         return;
-        
+
       }
       console.log(this.currentuser.length);
       if (this.currentuser == 0) {
@@ -548,7 +550,7 @@ var userinfo = new Vue({
         })
     },
     updateClass: function updateclass() {
-      
+
       var newlessoninfo = {
         topic: this.findTopic,
         location: this.updateLocation,
@@ -562,7 +564,7 @@ var userinfo = new Vue({
       if (!this.findTopic || !this.updateLocation || !this.findSchool || !this.updatePrice || !this.updateTime || !this.updateLength || !this.updateRating) {
         alert("Please fill in the relevant fields")
         return;
-        
+
       }
       console.log(this.currentuser.length);
       if (this.currentuser == 0) {
