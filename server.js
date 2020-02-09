@@ -61,8 +61,8 @@ Lesson.find({ topic: courses[1].topic, location: courses[1].location, school: co
 */
 app.get('/courses', (req, res) => {
     Lesson.find({}, function (err, lessons) {
-        if(lessons.length == 0){
-            for (i = 0; i <= courses.length-1; i++) {
+        if (lessons.length == 0) {
+            for (i = 0; i <= courses.length - 1; i++) {
                 const lessonData = new Lesson(courses[i]);
                 lessonData.save();
                 Lesson.find({}, function (err, lessons) {
@@ -171,6 +171,27 @@ app.post('/loguser', function (req, res) {
 
 });
 
+app.post('/updateuser', function (req, res) {
+    console.log(req.body.currentuseremail);
+    User.findOne({ email: req.body.email }, function (err, users) {
+        if (users.length !== 0) {
+            console.log("Email Already Registered")
+            return;
+        }
+        if (users.length == 0) {
+            User.findOne({ email: req.body.currentuseremail }, function (err, users) {
+                console.log(users)
+                User.updateOne({ email: users.email }, { $set: { email: req.body.email, firstname: req.body.firstname, lastname: req.body.lastname, password: req.body.password } })
+                    .catch(function (error, affect, resp) {
+                        console.log("updated");
+                    })
+                console.log("updated user");
+            })
+        }
+    })
+
+})
+
 app.post('/newreview', function (req, res) {
     Lesson.findOne({ topic: req.body.selectedtopic, school: req.body.selectedschool }, function (err, lessons) {
         //var x = lessons.reviews[1].authoremail;
@@ -179,37 +200,43 @@ app.post('/newreview', function (req, res) {
         //console.log(y);
         //console.log(x == y);
         console.log(lessons.reviews.length)
-        if(lessons.reviews.length == 0){
+        if (lessons.reviews.length == 0) {
             console.log("no reviews");
-            Lesson.updateOne({topic: req.body.selectedtopic, school: req.body.selectedschool },{$push :{reviews: {authoremail: req.body.email, authorfirstname: req.body.firstname, authorlastname: req.body.lastname, authorreview: req.body.userreview}}}).catch(function(error,affect,resp){
+            Lesson.updateOne({ topic: req.body.selectedtopic, school: req.body.selectedschool }, { $push: { reviews: { authoremail: req.body.email, authorfirstname: req.body.firstname, authorlastname: req.body.lastname, authorreview: req.body.userreview } } }).catch(function (error, affect, resp) {
                 console.log("review saved");
-             })
-             console.log("review saved");
+            })
+            Lesson.updateOne({ topic: req.body.selectedtopic, school: req.body.selectedschool }, { $set: { rating: req.body.userrating } }).catch(function (error, affect, resp) {
+                console.log("review saved");
+            })
         }
-        if(lessons.reviews.length !== 0){
-            for (i = 0; i <= lessons.reviews.length-1; i++) {
+        if (lessons.reviews.length !== 0) {
+            for (i = 0; i <= lessons.reviews.length - 1; i++) {
                 console.log(lessons.reviews[i]);
 
-                if(lessons.reviews[i].authoremail == req.body.email){
+                if (lessons.reviews[i].authoremail == req.body.email) {
                     console.log(lessons.reviews);
                     lessons.reviews[i].authorreview = req.body.userreview;
+                    lessons.rating = req.body.userrating;
                     console.log(lessons.reviews);
                     console.log("true")
-                    Lesson.updateOne({topic: req.body.selectedtopic, school: req.body.selectedschool },{$set :{reviews: lessons.reviews}}).catch(function(error,affect,resp){
+                    Lesson.updateOne({ topic: req.body.selectedtopic, school: req.body.selectedschool }, { $set: { reviews: lessons.reviews, rating: lessons.rating } }).catch(function (error, affect, resp) {
                         console.log("review saved");
-                     })
+                    })
                 }
-                if(lessons.reviews[i].authoremail !== req.body.email){
-                    Lesson.updateOne({topic: req.body.selectedtopic, school: req.body.selectedschool },{$push :{reviews: {authoremail: req.body.email, authorfirstname: req.body.firstname, authorlastname: req.body.lastname, authorreview: req.body.userreview}}}).catch(function(error,affect,resp){
+                if (lessons.reviews[i].authoremail !== req.body.email) {
+                    Lesson.updateOne({ topic: req.body.selectedtopic, school: req.body.selectedschool }, { $push: { reviews: { authoremail: req.body.email, authorfirstname: req.body.firstname, authorlastname: req.body.lastname, authorreview: req.body.userreview } } }).catch(function (error, affect, resp) {
                         console.log("review saved");
-                     })
+                    })
+                    Lesson.updateOne({ topic: req.body.selectedtopic, school: req.body.selectedschool }, { $set: { rating: req.body.userrating } }).catch(function (error, affect, resp) {
+                        console.log("review saved");
+                    })
                 }
             }
         }
         //Lesson.updateOne({school: lessons.school },{$set: {reviews: y }, function(err, result) {
-            //console.log(result);
+        //console.log(result);
         //}})
-        
+
 
 
 

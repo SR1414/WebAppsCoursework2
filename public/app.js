@@ -232,13 +232,18 @@ var userinfo = new Vue({
     Message: "Not Logged In",
     Activity: [],
     seen: 'false',
-    selectedClassId: '',
     retrievedActivity: [],
     SelectedTopic: '',
     SelectedSchool: '',
+    SetRating: '',
     UserReview: '',
     Reviews: [],
-    currentuser: []
+    currentuser: [],
+    UpdateEmail: '',
+    UpdateFirstname: '',
+    UpdateLastname: '',
+    UpdatePassword: ''
+
 
   },
   methods: {
@@ -261,7 +266,6 @@ var userinfo = new Vue({
 
       }
       if (this.currentuser) {
-        var userinfo = JSON.parse(localStorage.getItem("LoggedInUser"));
         loggedUser = [
           { Email: this.currentuser.email, 
             FirstName: this.currentuser.firstname, 
@@ -293,8 +297,49 @@ var userinfo = new Vue({
       }
 
     },
-    AddClass: function addclass() {
-      if(!this.SelectedTopic || !this.SelectedSchool || !this.UserReview){
+    UpdateUser: function updateuser() {
+      var updateinfo = {
+        currentuseremail: this.currentuser.email,
+        currentuserfirst: this.currentuser.firstname,
+        currentuserlast: this.currentuser.lastname,
+        currentuserpassword: this.currentuser.password,
+        email: this.UpdateEmail,
+        firstname: this.UpdateFirstname,
+        lastname: this.UpdateLastname,
+        password: this.UpdatePassword
+      };
+      if(this.currentuser.length == 0){
+        alert("Please Log In");
+        return;
+      }
+      if (!this.UpdateEmail || !this.UpdateFirstname || !this.UpdateLastname || !this.UpdatePassword) {
+        alert("Ensure all fields are filled in with valid information");
+        return;
+      }
+      fetch('/updateuser', {
+        method: 'POST',
+        // or 'PUT'   
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updateinfo),
+      })
+        .then((response) =>
+          response.json())
+        .then((data) => {
+          console.log("hello")
+          alert(data);
+        })
+        this.UpdateEmail = '';
+        this.UpdateFirstname = '';
+        this.UpdateLastname = '';
+        this.UpdatePassword = '';
+        this.loguserout();
+        alert("logged out")
+      
+    },
+    reviewClass: function reviewclass() {
+      if(!this.SelectedTopic || !this.SelectedSchool || !this.UserReview || !this.SetRating){
         alert("Please fill in the relevant fields")
         return;
       }
@@ -308,7 +353,8 @@ var userinfo = new Vue({
         lastname: this.currentuser.lastname,
         selectedtopic: this.SelectedTopic,
         selectedschool: this.SelectedSchool,
-        userreview: this.UserReview
+        userreview: this.UserReview,
+        userrating: this.SetRating
       };
       console.log(reviewinfo);
       fetch('/newreview', {
@@ -325,6 +371,10 @@ var userinfo = new Vue({
           console.log("hello")
           alert(data);
         })
+        this.SelectedSchool = '';
+        this.SelectedTopic = '';
+        this.SetRating = '';
+        this.UserReview = '';
     }
 
   }
