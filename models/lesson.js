@@ -10,6 +10,10 @@ const LessonSchema = new Schema({
         type: String,
         required: [true, 'Location field is required']
     },
+    school: {
+        type: String,
+        required: [true, 'School field is required']
+    },
     price: {
         type: Number,
         required: [true, 'Price field is required']
@@ -26,6 +30,10 @@ const LessonSchema = new Schema({
         type: Number,
         required: [true, 'Rating field is required']
     },
+    review: {
+        type: String,
+        required: [true, 'Review Field is Required']
+    }
 });
 
 const Lesson = mongoose.model('lessons', LessonSchema);

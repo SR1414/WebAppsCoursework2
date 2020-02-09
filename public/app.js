@@ -9,6 +9,7 @@ var testvue = new Vue({
   data: {
     search: '',
     checkedLocation: [],
+    selectedschool: [],
     filterRating: '',
     filterPrice: '',
     courses: []
@@ -34,11 +35,13 @@ var testvue = new Vue({
       )
       var topics = this.search;
       var locations = this.checkedLocation;
+      var schools = this.selectedschool;
       var rating = this.filterRating;
       var price = this.filterPrice;
       return this.courses.filter(function (course) {
         var topicMatch = false;
         var locationMatch = false;
+        var schoolMatch = false;
         var ratingMatch = false;
         var priceMatch = false;
         if (topics.length > 0) {
@@ -57,6 +60,14 @@ var testvue = new Vue({
         else {
           locationMatch = true;
         }
+        if (schools.length > 0) {
+          if (schools.includes(course.school)) {
+            schoolMatch = true;
+          }
+        }
+        else {
+          schoolMatch = true;
+        }
         if (rating.length > 0) {
           if (rating.includes(course.rating)) {
             ratingMatch = true;
@@ -74,7 +85,7 @@ var testvue = new Vue({
         else {
           priceMatch = true;
         }
-        return topicMatch && locationMatch && ratingMatch && priceMatch;
+        return topicMatch && locationMatch && schoolMatch && ratingMatch && priceMatch;
       })
     }
   }
@@ -117,24 +128,24 @@ var reg = new Vue({
         return;
       }
       //asks server for list of users and checks if it is empty or not
-      fetch('/newuser', {   
-        method: 'POST', 
+      fetch('/newuser', {
+        method: 'POST',
         // or 'PUT'   
-        headers: {     
-          'Content-Type': 'application/json',   
-        },   
-        body: JSON.stringify(data), 
-      }) 
-      .then((response) => response.json()) 
-      .then((data) => {   
-        console.log('Success:', data);
-        console.log(data.message);
-        console.log((data.firstname.length > 1));
-        if(data.firstname.length > 1){
-          reg.seen = false;
-        }
-        alert(data.message);
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
       })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('Success:', data);
+          console.log(data.message);
+          console.log((data.firstname.length > 1));
+          if (data.firstname.length > 1) {
+            reg.seen = false;
+          }
+          alert(data.message);
+        })
     }
   }
 });
@@ -160,7 +171,7 @@ var loginuser = new Vue({
         email: loginuser.logemail,
         password: loginuser.logpassword
       }
-      
+
       if (!this.logemail || !this.logpassword) {
         alert("Ensure all fields are filled in with valid information");
         return;
@@ -170,25 +181,36 @@ var loginuser = new Vue({
         return;
       }
       console.log(logdata);
-      fetch('/loguser', {   
-        method: 'POST', 
+      fetch('/loguser', {
+        method: 'POST',
         // or 'PUT'   
-        headers: {     
-          'Content-Type': 'application/json',   
-        },   
-        body: JSON.stringify(logdata), 
-      }) 
-      .then((response) => 
-      response.json()) 
-      .then((data) => {   
-        console.log(data.message);
-        console.log(data.firstname);
-        console.log(data.firstname.length);
-        if(data.firstname.length >= 1){
-          loginuser.seen = false;
-        }
-        alert(data.message);
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(logdata),
       })
+        .then((response) =>
+          response.json())
+        .then((data) => {
+          console.log(data.message);
+          console.log(data.firstname);
+          console.log(data.firstname.length);
+          if (data.firstname.length >= 1) {
+            loginuser.seen = false;
+            var info = {
+              email: data.email,
+              firstname: data.firstname,
+              lastname: data.lastname,
+              usertype: data.usertype,
+              password: data.password,
+              activity: data.activity,
+              reviews: data.reviews,
+            }
+            userinfo.currentuser = info;
+
+          }
+          alert(data.message);
+        })
 
     }
   }
@@ -206,17 +228,19 @@ var userinfo = new Vue({
     Activity: [],
     seen: 'false',
     selectedClassId: '',
-    retrievedActivity: []
+    retrievedActivity: [],
+    currentuser: []
 
   },
   methods: {
     getuserinfo: function userinfo() {
       var loggedUser;
+      console.log(this.currentuser);
       if (localStorage.getItem("LoggedInUser") == null) {
         loggedUser = [
           { Email: "-", FirstName: "-", LastName: "-", UserType: "-", Message: "Not Logged in" }
         ];
-        var noactivity = [{ topic: '-', location: '-', price: '-', time: '-', length: '-', rating: '-', classID: '-' }];
+        var noactivity = [{ topic: '-', location: '-', school: '-', price: '-', time: '-', length: '-', rating: '-', classID: '-' }];
         this.UserInfo = loggedUser;
         this.Email = "-";
         this.Firstname = "-";

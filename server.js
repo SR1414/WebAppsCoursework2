@@ -29,16 +29,16 @@ app.use('/api', routes);
 
 
 var courses = [
-    { topic: 'math', location: 'hendon', price: 100, time: '12:00', length: 2, rating: 5, },
-    { topic: 'math', location: 'colindale', price: 80, time: '13:00', length: 1.5, rating: 3, },
-    { topic: 'math', location: 'brent cross', price: 90, time: '12:00', length: 1, rating: 4, },
-    { topic: 'math', location: 'golders green', price: 120, time: '14:00', length: 2, rating: 5, },
-    { topic: 'english', location: 'hendon', price: 110, time: '15:00', length: 2.5, rating: 5, },
-    { topic: 'english', location: 'colindale', price: 90, time: '08:00', length: 2, rating: 4, },
-    { topic: 'english', location: 'brent cross', price: 90, time: '09:00', length: 2, rating: 2, },
-    { topic: 'english', location: 'golders green', price: 130, time: '10:00', length: 1, rating: 5, },
-    { topic: 'sports', location: 'hendon', price: 120, time: '14:00', length: 1, rating: 5, classID: 9 },
-    { topic: 'sports', location: 'golders green', price: 140, time: '16:00', length: 1.5, rating: 4, }];
+    { topic: 'math', location: 'hendon', school: 'Middlesex University', price: 100, time: '12:00', length: 2, rating: 5, },
+    { topic: 'math', location: 'colindale', school: 'St James Catholic High School', price: 80, time: '13:00', length: 1.5, rating: 3, reviews: [] },
+    { topic: 'math', location: 'brent cross', school: 'North London Tutorial College', price: 90, time: '12:00', length: 1, rating: 4, reviews: [] },
+    { topic: 'math', location: 'golders green', school: 'Golders Green College', price: 120, time: '14:00', length: 2, rating: 5, reviews: [] },
+    { topic: 'english', location: 'hendon', school: 'Wentworth College', price: 110, time: '15:00', length: 2.5, rating: 5, reviews: [] },
+    { topic: 'english', location: 'colindale', school: 'Barnet and Southgate College', price: 90, time: '08:00', length: 2, rating: 4, reviews: [] },
+    { topic: 'english', location: 'brent cross', school: 'Whitefield School', price: 90, time: '09:00', length: 2, rating: 2, reviews: [] },
+    { topic: 'english', location: 'golders green', school: 'The King Alfred School', price: 130, time: '10:00', length: 1, rating: 5, reviews: [] },
+    { topic: 'sports', location: 'hendon', school: 'Brampton College', price: 120, time: '14:00', length: 1, rating: 5, reviews: [] },
+    { topic: 'sports', location: 'golders green', school: 'Hampstead School', price: 140, time: '16:00', length: 1.5, rating: 4, reviews: [] }];
 //app.get('/lessons', function (req, res) {
 //  res.send(JSON.stringify(lessons));
 //})
@@ -94,11 +94,13 @@ app.post('/newuser', function (req, res) {
 app.post('/loguser', function (req, res) {
     var response = {
         activity: [],
+        reviews: [],
         email: "",
         firstname: "",
         lastname: "",
         usertype: "",
-        message: "",
+        password: "",
+        message: ""
     }
     console.log(req.body.email);
     var uemail = JSON.stringify(req.body.email);
@@ -119,10 +121,12 @@ app.post('/loguser', function (req, res) {
             if (users.password == req.body.password) {
                 console.log("Valid Password");
                 response.activity = users.activity;
+                response.reviews = users.reviews;
                 response.email = users.email;
                 response.firstname = users.firstname;
                 response.lastname = users.lastname;
                 response.usertype = users.usertype;
+                response.password = users.password;
                 response.message = "Logged In";
                 res.send(response);
             }

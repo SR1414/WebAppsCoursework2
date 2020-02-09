@@ -9,7 +9,8 @@ const UserSchema = new Schema({
     lastname: String,
     usertype: String,
     password: String,
-    activity: Array
+    activity: Array,
+    reviews: Array
 });
 
 const User = mongoose.model('users', UserSchema);

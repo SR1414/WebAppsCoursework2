@@ -69,6 +69,28 @@
       <input type="checkbox" id="golders green" value="golders green" v-model="checkedLocation">
       <label for="golders green">golders green</label>
       <br>
+      <label for="checkbox"><b>Filter by School:</b></label>
+      <label for="Middlesex University">Middlesex University</label>
+      <input type="checkbox" id="Middlesex University" value="Middlesex University" v-model="selectedschool"><br>
+      <label for="St James Catholic High School">St James Catholic High School</label>
+      <input type="checkbox" id="St James Catholic High School" value="St James Catholic High School" v-model="selectedschool"><br>
+      <label for="North London Tutorial College">North London Tutorial College</label>
+      <input type="checkbox" id="North London Tutorial College" value="North London Tutorial College" v-model="selectedschool"><br>
+      <label for="Golders Green College">Golders Green College</label>
+      <input type="checkbox" id="Golders Green College" value="Golders Green College" v-model="selectedschool"><br>
+      <label for="Wentworth College">Wentworth College</label>
+      <input type="checkbox" id="Wentworth College" value="Wentworth College" v-model="selectedschool"><br>
+      <label for="Barnet and Southgate College">Barnet and Southgate College</label>
+      <input type="checkbox" id="Barnet and Southgate College" value="Barnet and Southgate College" v-model="selectedschool"><br>
+      <label for="Whitefield School">Whitefield School</label>
+      <input type="checkbox" id="Whitefield School" value="Whitefield School" v-model="selectedschool"><br>
+      <label for="The King Alfred School">The King Alfred School</label>
+      <input type="checkbox" id="The King Alfred School" value="The King Alfred School" v-model="selectedschool"><br>
+      <label for="Brampton College">Brampton College</label>
+      <input type="checkbox" id="Brampton College" value="Brampton College" v-model="selectedschool"><br>
+      <label for="Hampstead School">Hampstead School</label>
+      <input type="checkbox" id="Hampstead School" value="Hampstead School" v-model="selectedschool"><br>
+      <br>
       <label for="number"><b>Filter by Rating:</b></label>
       <input type="number" name="quantity" v-model="filterRating" min="1" max="5">
       <label for="number"><b>Filter by Price(£):</b></label>
@@ -78,6 +100,7 @@
         Course:{{ course.topic }}<br>
         ID:{{ course.classID }}<br>
         Location: {{ course.location}}<br>
+        School: {{ course.school}}<br>
         Price:£{{ course.price}}<br>
         Time:{{ course.time }}<br>
         Length:{{ course.length }} hour(s)<br>
@@ -88,7 +111,7 @@
       <br>
       <br>
     </div>
-    <div id="app" class="item4">
+    <div id="app" class="item4" v-if="seen">
       <h1>Account:</h1>
       <button @click="getuserinfo">Display User Information</button>
       <div v-for="user in UserInfo">
@@ -102,6 +125,7 @@
       <div v-for="activity in retrievedActivity">
         Topic:{{ activity.topic }}
         <br>Location:{{ activity.location }}
+        <br>School:{{ activity.school}}
         <br>Price:{{ activity.price}}
         <br>Time:{{ activity.time}}
         <br>Length(hour):{{ activity.length}}
