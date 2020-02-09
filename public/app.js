@@ -1,4 +1,4 @@
-
+console.log("vue js loaded")
 
 //fetch('/getuser').then(response => {
 //});
