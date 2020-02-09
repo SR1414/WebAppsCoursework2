@@ -249,9 +249,14 @@ var userinfo = new Vue({
     newPrice: '',
     newTime: '',
     newLength: '',
-    newRating: ''
-
-
+    newRating: '',
+    findTopic: '',
+    updateLocation: '',
+    findSchool: '',
+    updatePrice: '',
+    updateTime: '',
+    updateLength: '',
+    updateRating: ''
   },
   methods: {
     getuserinfo: function userinfo() {
@@ -476,6 +481,49 @@ var userinfo = new Vue({
         return;
       }
       fetch('/newclass', {
+        method: 'POST',
+        // or 'PUT'   
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newlessoninfo),
+      })
+        .then((response) =>
+          response.json())
+        .then((data) => {
+          console.log("hello")
+          alert(data);
+        })
+    },
+    updateClass: function updateclass() {
+      
+      var newlessoninfo = {
+        topic: this.findTopic,
+        location: this.updateLocation,
+        school: this.findSchool,
+        price: this.updatePrice,
+        time: this.updateTime,
+        length: this.updateLength,
+        rating: this.updateRating,
+      }
+      console.log(newlessoninfo)
+      if (!this.findTopic || !this.updateLocation || !this.findSchool || !this.updatePrice || !this.updateTime || !this.updateLength || !this.updateRating) {
+        alert("Please fill in the relevant fields")
+        return;
+        
+      }
+      console.log(this.currentuser.length);
+      if (this.currentuser == 0) {
+        console.log("Please log in");
+        alert("Please log in");
+        return;
+      }
+      if (this.currentuser.usertype !== "Service Provider") {
+        console.log("Service Providers Only!");
+        alert("Service Providers Only!");
+        return;
+      }
+      fetch('/updateclass', {
         method: 'POST',
         // or 'PUT'   
         headers: {

@@ -166,6 +166,7 @@
       <input type="number" name="quantity" v-model="SetRating" min="1" max="5"><br>
       <textarea name="UserReview" v-model="UserReview" placeholder="Enter review" rows="4" cols="50"></textarea><br>
       <button @click="reviewClass">Submit Review</button><br><br><br>
+
       <label><b>Create Activity:</b></label><br>
       <label for="newTopic"><b>Set Topic:</b></label>
       <select name="newTopic" type="newTopic" v-model="newTopic">
@@ -186,11 +187,11 @@
         <option value="St James Catholic High School">St James Catholic High School</option>
         <option value="North London Tutorial College">North London Tutorial College</option>
         <option value="Golders Green College">Golders Green College</option>
-        <option value="Wentworth College">Golders Green College</option>
-        <option value="Barnet and Southgate College">Golders Green College</option>
-        <option value="Whitefield School">Golders Green College</option>
-        <option value="The King Alfred School">Golders Green College</option>
-        <option value="Brampton College">Golders Green College</option>
+        <option value="Wentworth College">Wentworth College</option>
+        <option value="Barnet and Southgate College">Barnet and Southgate College</option>
+        <option value="Whitefield School">Whitefield School</option>
+        <option value="The King Alfred School">The King Alfred School</option>
+        <option value="Brampton College">Brampton College</option>
         <option value="Hampstead School">Hampstead School</option>
       </select><br>
       <label for="newPrice"><b>Set Price:</b></label>
@@ -202,7 +203,46 @@
       <label for="newRating"><b>Set Rating ( /5 ):</b></label>
       <input type="number" name="newRating" v-model="newRating" min="1" max="5"><br>
       <br><br>
-      <button @click="addClass">Create Activity</button>
+      <button @click="addClass">Create Activity</button><br><br>
+
+      <label><b>Update Activity:</b></label><br>
+      <label><b>Get Class by Topic and School:</b></label><br>
+      <label for="findTopic"><b>Topic:</b></label>
+      <select name="findTopic" type="findTopic" v-model="findTopic">
+        <option value="math">math</option>
+        <option value="english">english</option>
+        <option value="sports">sports</option>
+      </select><br>
+      <label for="findSchool"><b>School:</b></label>
+      <select name="findSchool" type="findSchool" v-model="findSchool">
+        <option value="Middlesex University">Middlesex University</option>
+        <option value="St James Catholic High School">St James Catholic High School</option>
+        <option value="North London Tutorial College">North London Tutorial College</option>
+        <option value="Golders Green College">Golders Green College</option>
+        <option value="Wentworth College">Wentworth College</option>
+        <option value="Barnet and Southgate College">Barnet and Southgate College</option>
+        <option value="Whitefield School">Whitefield School</option>
+        <option value="The King Alfred School">The King Alfred School</option>
+        <option value="Brampton College">Brampton College</option>
+        <option value="Hampstead School">Hampstead School</option>
+      </select><br>
+      <label for="updateLocation"><b>Update Location:</b></label>
+      <select name="updateLocation" type="updateLocation" v-model="updateLocation">
+        <option value="golders green">golders green</option>
+        <option value="brent cross">brent cross</option>
+        <option value="colindale">colindale</option>
+        <option value="hendon">hendon</option>
+      </select><br>
+      <label for="updatePrice"><b>Update Price:</b></label>
+      <input type="number" name="updatePrice" v-model="updatePrice"><br>
+      <label for="updateTime"><b>Update Time:</b></label>
+      <input type="time" name="updateTime" v-model="updateTime"><br>
+      <label for="updateLength"><b>Update Length (Hours):</b></label>
+      <input type="number" name="updateLength" v-model="updateLength"><br>
+      <label for="updateRating"><b>Update Rating ( /5 ):</b></label>
+      <input type="number" name="updateRating" v-model="updateRating" min="1" max="5"><br>
+      <br><br>
+      <button @click="updateClass">Update Activity</button>
       
     </div>
   </div>

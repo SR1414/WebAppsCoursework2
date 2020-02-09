@@ -138,7 +138,7 @@ app.post('/newclass', function (req, res) {
         message: "",
     }
     const lessonData = new Lesson(req.body);
-                lessonData.save();
+    lessonData.save();
 });
 app.post('/loguser', function (req, res) {
     var response = {
@@ -204,11 +204,27 @@ app.post('/updateuser', function (req, res) {
     })
 
 })
+
+app.post('/updateclass', function (req, res) {
+    console.log(req.body);
+    Lesson.updateOne({ topic: req.body.topic, school: req.body.school }, { $set: {
+        location: req.body.location,
+        price: req.body.price,
+        time: req.body.time,
+        length: req.body.length,
+        rating: req.body.rating
+    } })
+        .catch(function (error, affect, resp) {
+            console.log("updated");
+        })
+})
+
+
 app.post('/deleteuser', function (req, res) {
     var response = {
         message: ''
     }
-    User.deleteOne({ email: req.body.currentuseremail }, function (err){
+    User.deleteOne({ email: req.body.currentuseremail }, function (err) {
         console.log("Account Deleted");
         res.send(response);
     })
@@ -217,7 +233,7 @@ app.post('/deleteuser', function (req, res) {
     var response = {
         message: ''
     }
-    User.deleteOne({ email: req.body.currentuseremail }, function (err){
+    User.deleteOne({ email: req.body.currentuseremail }, function (err) {
         console.log("Account Deleted");
         res.send(response);
     })
@@ -227,7 +243,7 @@ app.post('/deleteclass', function (req, res) {
         message: ''
     }
 
-    Lesson.deleteOne({ topic: req.body.selectedtopic, school: req.body.selectedschool }, function (err){
+    Lesson.deleteOne({ topic: req.body.selectedtopic, school: req.body.selectedschool }, function (err) {
         console.log("Class Deleted");
         response.message = "Class Deleted";
         res.send(response);
