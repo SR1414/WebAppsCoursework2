@@ -316,6 +316,6 @@ app.get('/getuser', function (req, res) {
 
 app.use(express.static('public'));
 
-app.listen('1000', function () {
-    console.log('Server Started on 1000...')
+app.listen('3000', function () {
+    console.log('Server Started on 3000...')
 });

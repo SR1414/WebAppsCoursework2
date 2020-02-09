@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <link rel="stylesheet" type="text/css" href="style.css">
-<link rel="manifest" href="js13kpwa.webmanifest">
 
 <head>
   <title>Skool App</title>
@@ -97,8 +96,8 @@
       <label for="number"><b>Filter by Price(£):</b></label>
       <input type="number" name="quantity" v-model="filterPrice" min="0" max="200">
       <div id="coursebox" v-for="course in filteredCourses">
-
-        Course:{{ course.topic }}<br>
+        <img :src="'img/'+course.school+'.jpg'"  width="100" height="100"><br>
+       Course:{{ course.topic }}<br>
         Location: {{ course.location}}<br>
         School: {{ course.school}}<br>
         Price:£{{ course.price}}<br>
@@ -250,6 +249,5 @@
 
 
 </body>
-<script src="data/games.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="app.js"></script>
