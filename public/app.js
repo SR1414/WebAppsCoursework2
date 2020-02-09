@@ -1,7 +1,25 @@
 console.log("vue js loaded")
 
-//fetch('/getuser').then(response => {
-//});
+//check for service worker
+if('serviceWorker' in navigator){
+  send().catch(err => console.error(err));
+}
+//register SW, push and send push
+async function send(){
+  //register service worker
+  console.log('Registering Service Worker...');
+  const register = await navigator.serviceWorker.register('/sw.js', {
+    scope: '/'
+  });
+  console.log('Service Work Registered...');
+
+  //register push
+  console.log('Registering Push...');
+  const subscription = await register.pushManager.subscribe({
+    userVisibleOnly: true
+  })
+}
+
 
 
 var testvue = new Vue({
